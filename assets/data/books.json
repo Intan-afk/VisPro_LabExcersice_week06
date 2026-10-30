@@ -1,0 +1,10 @@
+{
+  "books": [
+    { "id": "b01", "title": "Clean Code", "author": "Robert C. Martin", "replacementPrice": 350000 },
+    { "id": "b02", "title": "Flutter in Action", "author": "Eric Windmill", "replacementPrice": 280000 },
+    { "id": "b03", "title": "Dart Apprentice", "author": "Jonathan Sande", "replacementPrice": 300000 },
+    { "id": "b04", "title": "Design Patterns", "author": "Erich Gamma et al.", "replacementPrice": 420000 },
+    { "id": "b05", "title": "Laskar Pelangi", "author": "Andrea Hirata", "replacementPrice": 85000 }
+  ],
+  "loans": []
+}
