@@ -74,7 +74,7 @@ class BorrowedBooksScreen extends StatelessWidget {
                               bookTitle: viewModel.bookTitle(loan.bookId),
                               status: viewModel.statusOfLoan(loan),
                               fine: viewModel.outstandingFine(loan),
-                              overdueWeeks: viewModel.completedOverdueWeeks(loan),
+                              overdueDays: viewModel.overdueDaysOf(loan), // DIUBAH
                               canSettle: viewModel.canSettle(loan),
                               onReturn: () => showResultSnackBar(
                                   context, viewModel.returnBook(loan.id)),

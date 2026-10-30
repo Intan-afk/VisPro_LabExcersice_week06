@@ -13,7 +13,7 @@ class LoanCard extends StatelessWidget {
     required this.bookTitle,
     required this.status,
     required this.fine,
-    required this.overdueWeeks,
+    required this.overdueDays,
     required this.canSettle,
     required this.onReturn,
     required this.onSettle,
@@ -23,7 +23,7 @@ class LoanCard extends StatelessWidget {
   final String bookTitle;
   final LoanStatus status;
   final int fine;
-  final int overdueWeeks;
+  final int overdueDays;
   final bool canSettle;
   final VoidCallback onReturn;
   final VoidCallback onSettle;
@@ -34,10 +34,11 @@ class LoanCard extends StatelessWidget {
         return null;
       case LoanStatus.overdue:
         return fine == 0
-            ? 'Terlambat, belum ada denda (kurang dari 1 minggu penuh).'
-            : 'Denda: ${formatRupiah(fine)} ($overdueWeeks minggu penuh terlambat)';
+            ? 'Terlambat $overdueDays hari, belum ada denda.'
+            : 'Denda: ${formatRupiah(fine)} ($overdueDays hari terlambat)';
       case LoanStatus.missing:
-        return 'Dinyatakan hilang. Harga ganti ditagih: ${formatRupiah(fine)}';
+        return 'Dinyatakan hilang ($overdueDays hari terlambat). '
+            'Total ditagih (denda + harga ganti): ${formatRupiah(fine)}';
       case LoanStatus.returned:
         return fine == 0 ? null : 'Tagihan belum lunas: ${formatRupiah(fine)}';
     }

@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../models/book.dart';
 import '../models/library_status.dart';
 import '../models/loan.dart';
-import 'fine_Calculator.dart';
+import 'fine_calculator.dart';
 
 typedef Clock = DateTime Function();
 
@@ -96,9 +96,11 @@ class LibraryViewModel extends ChangeNotifier {
   List<Book> get books => List.unmodifiable(_books);
   List<Loan> get loans => List.unmodifiable(_loans);
 
-  List<Book> get availableBooks => List.unmodifiable(_books.where((b) => b.isAvailable));
+  List<Book> get availableBooks =>
+      List.unmodifiable(_books.where((b) => b.isAvailable));
 
-  List<Loan> get activeLoans => List.unmodifiable(_loans.where((l) => l.isActive));
+  List<Loan> get activeLoans =>
+      List.unmodifiable(_loans.where((l) => l.isActive));
 
   List<Loan> get overdueLoans => List.unmodifiable(_loans.where(
       (l) => l.isActive && getOverdueStatus(l) == OverdueStatus.overdue));
@@ -130,17 +132,17 @@ class LibraryViewModel extends ChangeNotifier {
     return returned != null ? FineCalculator.dateOnly(returned) : today;
   }
 
+  // DIUBAH: status terlambat sekarang memakai aturan di FineCalculator
   OverdueStatus getOverdueStatus(Loan loan) {
     final asOf = _evaluationDate(loan);
     if (_policy.isMissing(loan.dueDate, asOf)) return OverdueStatus.missing;
-    if (asOf.isAfter(FineCalculator.dateOnly(loan.dueDate))) {
-      return OverdueStatus.overdue;
-    }
+    if (_policy.isOverdue(loan.dueDate, asOf)) return OverdueStatus.overdue;
     return OverdueStatus.onTime;
   }
 
-  int completedOverdueWeeks(Loan loan) =>
-      _policy.completedOverdueWeeks(loan.dueDate, _evaluationDate(loan));
+  // DIUBAH: menggantikan completedOverdueWeeks (sekarang dalam hari)
+  int overdueDaysOf(Loan loan) =>
+      _policy.overdueDays(loan.dueDate, _evaluationDate(loan));
 
   int calculateFine(Loan loan) {
     return _policy.calculateFine(
@@ -150,7 +152,8 @@ class LibraryViewModel extends ChangeNotifier {
     );
   }
 
-  int outstandingFine(Loan loan) => loan.isFineSettled ? 0 : calculateFine(loan);
+  int outstandingFine(Loan loan) =>
+      loan.isFineSettled ? 0 : calculateFine(loan);
 
   bool canSettle(Loan loan) => loan.isReturned && outstandingFine(loan) > 0;
 
@@ -242,15 +245,19 @@ class LibraryViewModel extends ChangeNotifier {
         ),
     ];
   }
+
   int totalCopies(BookGroup group) {
     final key = _titleKey(group.copies.first);
     return _books.where((b) => _titleKey(b) == key).length;
   }
+
   int availableCount(BookGroup group) {
     final key = _titleKey(group.copies.first);
     return _books.where((b) => _titleKey(b) == key && b.isAvailable).length;
   }
+
   bool canBorrowGroup(BookGroup group) => availableCount(group) > 0;
+
   ActionResult borrowFromGroup(BookGroup group, String studentId) {
     final key = _titleKey(group.copies.first);
     final copy =
@@ -328,12 +335,10 @@ class LibraryViewModel extends ChangeNotifier {
     _loans.add(loan);
     _books[bookIndex] = book.copyWith(availability: BookAvailability.onLoan);
     notifyListeners();
-
     return ActionResult.success(
         '"${book.title}" borrowed by $student. Due on ${_formatDate(loan.dueDate)}.');
-  }
-
-  ActionResult returnBook(String loanId) {
+    }
+    ActionResult returnBook(String loanId) {
     final loanIndex = _loans.indexWhere((l) => l.id == loanId);
     if (loanIndex < 0) {
       return const ActionResult.failure('Loan not found.');
