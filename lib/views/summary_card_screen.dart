@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'views_helpers.dart';
+import 'views_helpers_screen.dart';
 
 class FineSummaryCard extends StatelessWidget {
   const FineSummaryCard({

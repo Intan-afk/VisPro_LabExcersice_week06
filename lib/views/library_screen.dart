@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../viewmodels/library_view_model.dart';
 import 'book_group_section.dart';
 import 'borrowed_books_screen.dart';
-import 'summary_card.dart';
-import 'views_helpers.dart';
+import 'summary_card_screen.dart';
+import 'views_helpers_screen.dart';
 
 class LibraryScreen extends StatelessWidget {
   const LibraryScreen({super.key, required this.viewModel});

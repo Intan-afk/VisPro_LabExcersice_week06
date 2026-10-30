@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../viewmodels/library_view_model.dart';
-import 'status_borrow.dart';
-import 'views_helpers.dart';
+import 'status_borrow_screen.dart';
+import 'views_helpers_screen.dart';
 
 class BookGroupSection extends StatelessWidget {
   const BookGroupSection({

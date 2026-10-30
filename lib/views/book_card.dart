@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../models/book.dart';
 import '../models/library_status.dart';
-import 'status_borrow.dart';
-import 'views_helpers.dart';
+import 'status_borrow_screen.dart';
+import 'views_helpers_screen.dart';
 
 class BookCard extends StatelessWidget {
   const BookCard({
